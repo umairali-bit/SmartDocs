@@ -1,6 +1,8 @@
 package com.example.smartDocs.service;
 
 
+import com.example.smartDocs.entities.UploadedDocumentChunk;
+import com.example.smartDocs.repositories.SmartDocsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
@@ -17,6 +19,7 @@ import java.util.List;
 public class SmartDocsIngestionService {
 
     private final PgVectorStore vectorStore;
+    private final SmartDocsRepository smartDocsRepository;
 
     public void ingestDocument(Resource resource, String documentId){
         PagePdfDocumentReader  reader = new PagePdfDocumentReader(resource);
@@ -32,6 +35,20 @@ public class SmartDocsIngestionService {
 
         List<Document> chunks = splitter.split(pages);
         vectorStore.add(chunks);
+
+        for (int i = 0; i < chunks.size(); i++) {
+
+            Document chunk = chunks.get(i);
+
+            UploadedDocumentChunk entity =
+                    new UploadedDocumentChunk();
+
+            entity.setDocumentId(documentId);
+            entity.setChunkNumber(i + 1);
+            entity.setContent(chunk.getText());
+
+            smartDocsRepository.save(entity);
+        }
 
     }
 }
