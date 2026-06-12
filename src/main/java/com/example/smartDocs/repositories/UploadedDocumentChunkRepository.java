@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SmartDocsRepository extends JpaRepository<UploadedDocumentChunk, Long> {
+public interface UploadedDocumentChunkRepository extends JpaRepository<UploadedDocumentChunk, Long> {
 
     List<UploadedDocumentChunk> findByDocumentIdOrderByChunkNumberAscending(String documentId);
 }

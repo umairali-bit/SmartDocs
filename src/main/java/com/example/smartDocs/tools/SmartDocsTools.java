@@ -2,7 +2,8 @@ package com.example.smartDocs.tools;
 
 
 import com.example.smartDocs.entities.UploadedDocumentChunk;
-import com.example.smartDocs.repositories.SmartDocsRepository;
+import com.example.smartDocs.repositories.UploadedDocumentChunkRepository;
+import com.example.smartDocs.repositories.UploadedDocumentRepository;
 import com.example.smartDocs.service.SmartDocsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
@@ -16,17 +17,26 @@ import java.util.stream.Collectors;
 public class SmartDocsTools {
 
     private final SmartDocsService smartDocsService;
-    private final SmartDocsRepository smartDocsRepository;
+    private final UploadedDocumentChunkRepository uploadedDocumentChunkRepository;
+    private final UploadedDocumentRepository uploadedDocumentRepository;
 
     @Tool(description = "Retrieve the complete document text")
     public String getEntireDocument(String documentId) {
 
         List<UploadedDocumentChunk> chunks =
-                smartDocsRepository.findByDocumentIdOrderByChunkNumberAscending(documentId);
+                uploadedDocumentChunkRepository.findByDocumentIdOrderByChunkNumberAscending(documentId);
         return chunks.stream()
                 .map(i -> i.getContent())
                 .collect(Collectors.joining("\n"));
 
+    }
+
+    @Tool(description = "Get the total number of pages in a document")
+    public Integer getTotalNumberOfPages(String documentId) {
+        return uploadedDocumentRepository
+                .findById(documentId)
+                .map(document -> document.getPageCount())
+                .orElse(0);
     }
 
 
