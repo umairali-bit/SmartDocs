@@ -1,4 +1,4 @@
-package com.example.smartDocs.service;
+package com.example.smartDocs.services;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,6 @@ import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvi
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -26,5 +26,5 @@ public class UploadDocument {
     private Integer pageCount;
 
     @CreationTimestamp
-    private LocalDateTime uploadDate;
+    private LocalDateTime uploadedAt;
 }

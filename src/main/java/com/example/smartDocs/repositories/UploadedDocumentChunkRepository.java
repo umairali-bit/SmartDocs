@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface UploadedDocumentChunkRepository extends JpaRepository<UploadedDocumentChunk, Long> {
 
-    List<UploadedDocumentChunk> findByDocumentIdOrderByChunkNumberAscending(String documentId);
+    List<UploadedDocumentChunk> findByDocumentIdOrderByChunkNumberAsc(String documentId);
 }

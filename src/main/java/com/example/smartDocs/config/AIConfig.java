@@ -1,5 +1,6 @@
 package com.example.smartDocs.config;
 
+import com.example.smartDocs.tools.SmartDocsTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -18,14 +19,13 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class AIConfig {
 
-
-    private final ChatMemory  chatMemory;
-    private final VectorStore vectorStore;
+    private final SmartDocsTools smartDocsTools;
 
     @Bean
     public ChatClient ollamaChatClient(OllamaChatModel model) {
 
         return ChatClient.builder(model)
+                .defaultTools(smartDocsTools)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build();
 

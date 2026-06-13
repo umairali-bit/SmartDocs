@@ -1,4 +1,4 @@
-package com.example.smartDocs.service;
+package com.example.smartDocs.services;
 
 
 import com.example.smartDocs.entities.UploadDocument;

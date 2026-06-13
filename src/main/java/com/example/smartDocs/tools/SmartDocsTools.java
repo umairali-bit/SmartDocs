@@ -1,10 +1,11 @@
 package com.example.smartDocs.tools;
 
 
+import com.example.smartDocs.entities.UploadDocument;
 import com.example.smartDocs.entities.UploadedDocumentChunk;
 import com.example.smartDocs.repositories.UploadedDocumentChunkRepository;
 import com.example.smartDocs.repositories.UploadedDocumentRepository;
-import com.example.smartDocs.service.SmartDocsService;
+import com.example.smartDocs.services.SmartDocsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SmartDocsTools {
 
-    private final SmartDocsService smartDocsService;
     private final UploadedDocumentChunkRepository uploadedDocumentChunkRepository;
     private final UploadedDocumentRepository uploadedDocumentRepository;
 
@@ -24,7 +24,7 @@ public class SmartDocsTools {
     public String getEntireDocument(String documentId) {
 
         List<UploadedDocumentChunk> chunks =
-                uploadedDocumentChunkRepository.findByDocumentIdOrderByChunkNumberAscending(documentId);
+                uploadedDocumentChunkRepository.findByDocumentIdOrderByChunkNumberAsc(documentId);
         return chunks.stream()
                 .map(i -> i.getContent())
                 .collect(Collectors.joining("\n"));
@@ -38,6 +38,45 @@ public class SmartDocsTools {
                 .map(document -> document.getPageCount())
                 .orElse(0);
     }
+
+    @Tool(description = "Get document metadata ")
+    public String getDocumentMetada(String documentId) {
+
+        UploadDocument document = uploadedDocumentRepository.findById(documentId)
+                                    .orElseThrow(
+                                            () -> new RuntimeException("Document not found"));
+
+        return """
+                Document Id: %s
+                File Name: %s
+                Page Count: %d
+                Uploaded At: %s
+                """
+                .formatted(
+                        document.getDocumentId(),
+                        document.getFileName(),
+                        document.getPageCount(),
+                        document.getUploadedAt()
+                );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
