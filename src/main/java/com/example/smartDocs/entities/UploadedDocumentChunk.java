@@ -20,7 +20,7 @@ public class UploadedDocumentChunk {
 
     private Integer chunkNumber;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
 

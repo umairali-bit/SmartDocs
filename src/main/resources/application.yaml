@@ -10,7 +10,7 @@ spring:
 
       chat:
         options:
-          model: qwen3:30b
+          model: qwen2.5:3b
 
       embedding:
         options:
@@ -30,3 +30,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+
+logging:
+  level:
+    org.springframework.ai:
+      chat.client: DEBUG

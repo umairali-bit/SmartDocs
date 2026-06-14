@@ -1,5 +1,6 @@
 package com.example.smartDocs.config;
 
+import com.example.smartDocs.advisors.TokenUsageAdvisor;
 import com.example.smartDocs.tools.SmartDocsTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -26,7 +27,9 @@ public class AIConfig {
 
         return ChatClient.builder(model)
                 .defaultTools(smartDocsTools)
-                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .defaultAdvisors(
+                        new SimpleLoggerAdvisor(),
+                        new TokenUsageAdvisor())
                 .build();
 
     }
@@ -35,7 +38,7 @@ public class AIConfig {
     public ChatMemory memory(JdbcChatMemoryRepository repository) {
         return MessageWindowChatMemory.builder()
                 .chatMemoryRepository(repository)
-                .maxMessages(20)
+                .maxMessages(5)
                 .build();
 
     }

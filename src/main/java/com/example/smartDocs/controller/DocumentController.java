@@ -1,13 +1,15 @@
 package com.example.smartDocs.controller;
 
 
+import com.example.smartDocs.dtos.ChatRequestDTO;
+import com.example.smartDocs.dtos.ChatResponseDTO;
 import com.example.smartDocs.dtos.UploadResponseDTO;
 import com.example.smartDocs.services.SmartDocsIngestionService;
+import com.example.smartDocs.services.SmartDocsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.UUID;
 public class DocumentController {
 
     private final SmartDocsIngestionService ingestionService;
+    private final SmartDocsService  smartDocsService;
+
 
     @PostMapping("/upload")
     public UploadResponseDTO uploadDocument(
@@ -36,4 +40,17 @@ public class DocumentController {
                 file.getOriginalFilename()
         );
     }
+
+    @PostMapping("/ask")
+    public ResponseEntity<ChatResponseDTO> askQuestion(@RequestBody ChatRequestDTO request) {
+
+        String answer = smartDocsService.askDocument(
+                request.documentId(),
+                request.question(),
+                request.conversationId()
+        );
+
+        return ResponseEntity.ok(new ChatResponseDTO(answer));
+    }
+
 }
